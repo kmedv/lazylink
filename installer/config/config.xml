@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Installer>
+    <Name>Lazylink</Name>
+    <Version>0.13.1</Version>
+    <Title>Lazylink Desktop Application Installer</Title>
+    <Publisher>lazylink.net</Publisher>
+    <ProductUrl>https://lazylink.net</ProductUrl>
+    <TargetDir>@HomeDir@/AppData/Local/Programs/@ProductName@</TargetDir>
+    <StartMenuDir>LazyLink</StartMenuDir>
+    <RunProgram>@TargetDir@/lazylink.exe</RunProgram>
+    <ControlScript>controlscript.js</ControlScript>
+</Installer>

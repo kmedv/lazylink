@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/certs">
+        <file>dsa_pub.pem</file>
+    </qresource>
+</RCC>

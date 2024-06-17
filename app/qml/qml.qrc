@@ -1,0 +1,35 @@
+<RCC>
+    <qresource prefix="/qml">
+        <file>ActionBar.qml</file>
+        <file>BottomBar.qml</file>
+        <file>ColoredButton.qml</file>
+        <file>DonateButton.qml</file>
+        <file>ImageButton.qml</file>
+        <file>LogoPanel.qml</file>
+        <file>NotificationButton.qml</file>
+        <file>NotificationPopup.qml</file>
+        <file>OnOffSwitch.qml</file>
+        <file>ShadowedWindow.qml</file>
+        <file>SystemBar.qml</file>
+        <file>SystemBarButton.qml</file>
+        <file>UniButton.qml</file>
+        <file>components/BasicButton.qml</file>
+        <file>components/Shadow.qml</file>
+        <file>main.qml</file>
+        <file>patterns/ActionBar.qml</file>
+        <file>patterns/ActionBarUrlEditor.qml</file>
+        <file>patterns/CancelButton.qml</file>
+        <file>patterns/PatternItemDelegate.qml</file>
+        <file>patterns/PatternsFragment.qml</file>
+        <file>patterns/PatternsList.qml</file>
+        <file>patterns/Placeholder.qml</file>
+        <file>patterns/PopupMenu.qml</file>
+        <file>patterns/PopupMenuItem.qml</file>
+        <file>patterns/SaveButton.qml</file>
+        <file>settings/SettingsActionBar.qml</file>
+        <file>settings/SettingsButton.qml</file>
+        <file>settings/SettingsCheckBox.qml</file>
+        <file>settings/SettingsFragment.qml</file>
+        <file>settings/SettingsList.qml</file>
+    </qresource>
+</RCC>

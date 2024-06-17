@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<Package>
+    <DisplayName>Lazylink</DisplayName>
+    <Description>Lazylink Desktop Application</Description>
+    <Version>0.13.1</Version>
+    <ReleaseDate>2019-05-13</ReleaseDate>
+    <Name>net.lazylink.app</Name>
+    <Licenses>
+        <License name="LAZYLINK END USER LICENSE AGREEMENT" file="EULA" />
+    </Licenses>
+    <Default>true</Default>
+    <Script>installscript.js</Script>
+    <ForcedInstallation>true</ForcedInstallation>
+</Package>

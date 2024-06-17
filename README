@@ -1,0 +1,54 @@
+This is the code for Lazylink Desktop client initially developed for lazylink.com project for macOS and Windows platforms.
+The project was a pet project of two friends, but for the last 5 years we haven't enough time to work on it any further.
+So, we have decided to push the code to open source, so it might still have any usability for someone else.
+
+Framework – Qt 5.12 on C++
+
+Building Notes
+
+WINDOWS (x64)
+
+HOW TO CONFIGURE THE PROJECT IN QT CREATOR
+1.  During project configuration select Debug and Release profiles only.
+2.  In both profiles set build directory as <project_folder>/build.
+3.  In result, in both Debug and Release configurations Shadow Build should be enabled,
+and the Build Directory is set to <project_folder>/build.
+That's it, you can debug or run Lazylink using standard Qt Creator workflows.
+
+
+HOW TO MAKE A RELEASE BUILD FROM THE CONSOLE
+1. Launch the x64 Native Tools Command Prompt for Visual Studio
+2. Set the %QTDIR% env. variable in the shell to current Qt path, eg.:
+set %QTDIR%=c:\dev\Qt\5.12.3\msvc2017_64
+3. Launch deploy-win.cmd in the shell from the source root folder.
+4. After script is done, the release build with all dependencies will be placed
+in the out\release folder.
+
+
+HOW TO CREATE THE INSTALLER
+1. Create Release deliverable as described before in the default output folder.
+2. Open or reuse the x64 Native Tools Command Prompt for Visual Studio.
+3. Set the %QIFDIR% env. variable in the shell to the current QIF path, eg.:
+set %QIFDIR%=C:\dev\Qt\Tools\QtInstallerFramework\3.1
+4. Launch deploy-win-installer.cmd in the shell from the source root folder.
+5. After the script is finished, the installer executable wiill be placed
+into the out\ folder.
+
+HOW TO DEPLOY THE NEW VERSION ONTO THE UPDATE SERVER
+1. Verify that these files has the same new version number:
+- lazylink.pro
+- installer/config/config.xml
+- installer/packages/meta/package.xml - Note, you should update the release date here also.
+2. Create installer package as described above.
+3. Rename installer by the template: lazylink-<version>.exe.
+4. Use the sign_update script from original Sparkle or WinSparkle to sign the installer using
+app/certs/dsa_priv.pem  private key.
+5. Upload the installer and update the webserver appcast.xml description.
+
+
+macOS
+
+It was buildable and deployable through App Store, but the notes were lost. Probably, with some basic research through the deployment scripts the one can easily get it done on macOS
+
+Linux
+It was never built on Linux, but theoretically it should :( 

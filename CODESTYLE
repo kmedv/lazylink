@@ -1,0 +1,39 @@
+LAZYLINK CODESTYLE GUIDE
+
+
+QML
+
+QML codestyle fully conforms to the Qt standard QML coding convention described here:
+https://doc.qt.io/qt-5/qml-codingconventions.html
+
+
+C++
+
+1. C++14 language standard supported and recommended to be used.
+2. Hard limit of 100 columns per line.
+3. Use #pragma once for header protection.
+4. #includes are sorted with respect to header's scope: C++, system, Qt, SDKs, internals.
+5. Classes are named according to the CamelCase notation.
+6. Class members are organised according to the Reader's interest principle:
+    First comes the members which are most interesting for a most common reader.
+    Effectively, that means:
+    6.1. In respect to the privacy scope members are sorted in this way:
+        public, protected, private.
+        Rationale:
+            - public members are interesting for everyone,
+            - protected are interested for developers which expands class functionality,
+            - private members are interesting for class authors only.
+    6.2. Methods are described before fields.
+        Rationale: If this is not a POCO object, reader uses the class through methods,
+            not fields.
+    6.3. Static members described first.
+        Rationale: Static members can be used even without object construction,
+            so they can be used in a wider scope neither their non-static counterparts.
+    6.4. Constructor declared before any other members, even if it is not in public scope.
+        Rationale: It is quite safe to suppose that the ways to constuct the object
+            are more interesting neither any other methods for all readers.
+    6.5. Qt macros are declared in the beginning of the class, before any constructor.
+        Rationale: Qt macros defines Qt object properties, so it is more interesting
+            comparing to other methods for all readers.
+7. A class should be described in one header and one source file of the same name.
+8. Along with all these rules, the Rational mind approach also respected :)

@@ -1,0 +1,83 @@
+#!/bin/bash
+LAUNCH_DIR=$(pwd)
+PRO_FPATH=$LAUNCH_DIR/app/lazylink.pro
+QMAKE_STASH_DIR=$LAUNCH_DIR/app/.qmake_stash
+BUILD_DIR=$LAUNCH_DIR/app/build
+QML_DIR=$LAUNCH_DIR/app/qml
+
+OUT_DIR=$LAUNCH_DIR/out 
+OUT_APP_DIR=$OUT_DIR/app
+DMG_FNAME="lazylink.dmg"
+
+LAUNCHER_DIR=$LAUNCH_DIR/macos/LazylinkLauncher
+LAUNCHER_OUT_DIR=$LAUNCHER_DIR/build/Release
+LOGIN_ITEMS_DIR=$OUT_APP_DIR/Lazylink.app/Contents/Library/LoginItems
+
+IDENTITY_DEVELOPER="YOUR_IDENTITY"  # Put your identity here
+CODESIGN_IDENTITY="3rd Party Mac Developer Application: $IDENTITY_DEVELOPER"
+PRODUCTBUILD_IDENTITY="3rd Party Mac Developer Installer: $IDENTITY_DEVELOPER"
+
+echo "Cleaning the old build"
+rm -rf $OUT_DIR
+rm -rf $BUILD_DIR
+rm -rf $QMAKE_STASH_DIR
+
+echo "Building Lazylink.app"
+mkdir -p $BUILD_DIR
+cd $BUILD_DIR
+$QTDIR/bin/qmake $PRO_FPATH
+make
+cd $LAUNCH_DIR
+mkdir -p $OUT_APP_DIR
+cp -R $BUILD_DIR/release/Lazylink.app $OUT_APP_DIR/
+
+echo "Deploying Lazylink.app"
+$QTDIR/bin/macdeployqt $OUT_APP_DIR/Lazylink.app -qmldir=$QML_DIR -appstore-compliant # -codesign=$CODESIGN_IDENTITY
+rm -rf $OUT_APP_DIR/Lazylink.app/Contents/PlugIns/bearer
+rm -rf $OUT_APP_DIR/Lazylink.app/Contents/PlugIns/printsupport
+rm -rf $OUT_APP_DIR/Lazylink.app/Contents/PlugIns/imageformats
+rm -rf $OUT_APP_DIR/Lazylink.app/Contents/PlugIns/iconengines
+rm -rf $OUT_APP_DIR/Lazylink.app/Contents/Frameworks/QtSvg.framework
+find $OUT_APP_DIR/Lazylink.app -name *.dSYM | xargs -I $ rm -R $
+
+echo "Building LazylinkLauncher.app"
+cd $LAUNCHER_DIR
+xcodebuild -configuration Release clean build CONFIGURATION_BUILD_DIR=build/Release
+cd $LAUNCH_DIR
+mkdir -p $LOGIN_ITEMS_DIR
+cp -R $LAUNCHER_OUT_DIR/LazylinkLauncher.app $LOGIN_ITEMS_DIR/
+
+echo "Signing the app files."
+# codesign -f -s "$CODESIGN_IDENTITY" --entitlements $LAUNCHER_DIR/LazylinkLauncher/LazylinkLauncher.entitlements $LOGIN_ITEMS_DIR/LazylinkLauncher.app
+codesign --deep --force --verify \
+    --options runtime \
+    --entitlements $LAUNCH_DIR/app/Lazylink.entitlements \
+    --sign "$CODESIGN_IDENTITY" \
+    $OUT_APP_DIR/Lazylink.app
+
+echo "Packaging Lazylink.pkg"
+productbuild --component $OUT_APP_DIR/Lazylink.app /Applications --sign "$PRODUCTBUILD_IDENTITY" --product $OUT_APP_DIR/lazylink.app/Contents/Info.plist $OUT_APP_DIR/Lazylink.pkg
+
+# cd $OUT_APP_DIR/lazylink.app
+# for i in Contents/Frameworks/*; do
+#     [ -d "$i" ] || break
+#     echo "Signing $i"
+#     codesign -s "$CODESIGN_IDENTITY" $i
+# done
+# find Contents/PlugIns -name "*.dylib" | while read i; do
+#     [ -f "$i" ] || break
+#     echo "Signing $i"
+#     codesign -s "$CODESIGN_IDENTITY" $i
+# done
+# codesign -s "$CODESIGN_IDENTITY" Contents/MacOS/lazylink
+# codesign -f -s "$CODESIGN_IDENTITY" --entitlements $LAUNCH_DIR/app/Lazylink.entitlements $OUT_APP_DIR/lazylink.app
+
+# Create the .dmg file
+# ln -s /Applications $OUT_APP_DIR/Applications
+# hdiutil create -volname Lazylink -srcfolder $OUT_APP_DIR -ov -format UDZO $OUT_DIR/$DMG_FNAME
+
+# Deploy to web server
+# 1. Copy web server folder (app/macos) into deploy/ folder
+# 2. Move out/lazylink.dmg to deploy/lazylink-<version>.dmg
+# 3. Run app/ext/sparkle/bin/generate_appcast updater/macosx/dsa_priv.pem deploy/
+# 4. Update web server folder with contents of the deploy/ one.
